@@ -11,6 +11,7 @@ FILES:
 	methods.cpp
 	methods.h
 	schuduler.cpp
+	500k_processes
 	
 TEST FILES:
 	test.cpp

@@ -15,4 +15,4 @@ test.o: test.cpp
 	g++ -c test.cpp $(CFLAGS)
 
 clean:
-	rm -f *.o scheduler 
+	rm -f *.o scheduler test
