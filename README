@@ -1,3 +1,17 @@
 Scheduler
 Authors: Jens Streck, Joe Woznicki
 
+
+COMPILE:
+	> make
+	> ./scheduler
+
+FILES:
+	Makefile
+	methods.cpp
+	methods.h
+	schuduler.cpp
+	
+TEST FILES:
+	test.cpp
+
