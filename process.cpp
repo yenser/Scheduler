@@ -1,15 +1,15 @@
-//Pid - Burst - Arrival - Pri - Dline - I/O
+//Pid - Burst - Arrival - Priority - Deadline - I/O
 #include <iostream>
 #include "process.h"
 
-int ProcessId, Burst, Arrival, Pri, Dline, IO;
+int ProcessId, Burst, Arrival, Priority, Deadline, IO;
 
-Process::Process(int ProcessId, int Burst, int Arrival, int Pri, int Dline, int IO) {
+Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadline, int IO) {
 	this->ProcessId = ProcessId;
 	this->Burst = Burst;
 	this->Arrival = Arrival;
-	this->Pri = Pri;
-	this->Dline = Dline;
+	this->Priority = Priority;
+	this->Deadline = Deadline;
 	this->IO = IO;
 }
 
@@ -17,8 +17,8 @@ Process::Process() {
 	this->ProcessId = -1;
 	this->Burst = -1;
 	this->Arrival = -1;
-	this->Pri = -1;
-	this->Dline = -1;
+	this->Priority = -1;
+	this->Deadline = -1;
 	this->IO = -1;
 }
 
@@ -32,23 +32,23 @@ int Process::getBurst() {
 int Process::getArrival() {
 	return Arrival;
 }
-int Process::getPri() {
-	return Pri;
+int Process::getPriority() {
+	return Priority;
 }
-int Process::getDline() {
-	return Dline;
+int Process::getDeadline() {
+	return Deadline;
 }
 int Process::getIO() {
 	return IO;
 }
 
 
-void Process::setAll(int ProcessId, int Burst, int Arrival, int Pri, int Dline, int IO) {
+void Process::setAll(int ProcessId, int Burst, int Arrival, int Priority, int Deadline, int IO) {
 	this->ProcessId = ProcessId;
 	this->Burst = Burst;
 	this->Arrival = Arrival;
-	this->Pri = Pri;
-	this->Dline = Dline;
+	this->Priority = Priority;
+	this->Deadline = Deadline;
 	this->IO = IO;
 }
 
@@ -64,12 +64,12 @@ void Process::setArrival(int newArrival) {
 	Arrival = newArrival;
 }
 
-void Process::setPri(int newPri) {
-	Pri = newPri;
+void Process::setPriority(int newPriority) {
+	Priority = newPriority;
 }
 
-void Process::setDline(int newDline) {
-	Dline = newDline;
+void Process::setDeadline(int newDeadline) {
+	Deadline = newDeadline;
 }
 
 void Process::setIO(int newIO) {
@@ -78,5 +78,5 @@ void Process::setIO(int newIO) {
 
 void Process::print() {
 	std::cout << ProcessId << "	" << Burst << "	" << Arrival
-	 << "	" << Pri << "	" << Dline << "	" << IO << "\n";
+	 << "	" << Priority << "	" << Deadline << "	" << IO << "\n";
 }

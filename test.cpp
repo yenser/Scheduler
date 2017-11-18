@@ -4,45 +4,30 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "process.h"
+#include "methods.h"
 
 using namespace std;
 
 
+// bool sortProcess(const Process & p1, const Process & p2) {
+//    if (*p1.getArrival() != *p2.getArrival()) return *p1.getArrival() < *p2.getArrival();
+//    return *p1.getArrival() < *p2.getArrival();
+// }
 
 int main() {
 
-	ifstream infile("500k_processes");
-	//int processes[500000][6];
-	string line;
-	cout << "starting to read\n";
-	int i = 0;
 	vector<Process> processes;
+	string fileName = "500k_processes";
 
-	std::getline(infile, line);
-	cout << "Pid	Bst	Arr	Pri	Dline	I/O\n";
-	cout << "+_________________________________________+\n";
-	while (std::getline(infile, line)) {
-		
-	    std::istringstream iss(line);
-	    int a, b, c, d, e, f;
-	    if (!(iss >> a >> b >> c >> d >> e >> f)) { 
-	    	cout << "error\n";
-	    	break; 
-	    } // error
+	processes = readFileOfProcesses(fileName);
 
-	    if(a < 0 || b < 0 || c < 0 || d < 0 || e < 0 || f < 0)
-	    	continue;
-	    processes.push_back(Process(a,b,c,d,e,f));
-	    i++;
-	}
 
-	for(int j = 0; j < i; j++) {
+	for(int j = 0; j < 500; j++) {
 		processes.at(j).print();
 	}
-
-	cout << "\nlength without negatives: " << i << "\n";
 
 	return 0;
 }

@@ -1,5 +1,6 @@
 methods.o
 scheduler.o
+process.o
 test.o
 scheduler
 test
