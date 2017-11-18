@@ -18,8 +18,7 @@ int main() {
 	string line;
 	cout << "starting to read\n";
 	int i = 0;
-	int size = 500000;
-	vector<Process> processes[size];
+	vector<Process> processes;
 
 	std::getline(infile, line);
 	cout << "Pid	Bst	Arr	Pri	Dline	I/O\n";
@@ -35,14 +34,15 @@ int main() {
 
 	    if(a < 0 || b < 0 || c < 0 || d < 0 || e < 0 || f < 0)
 	    	continue;
-	    processes[i].setAll(a,b,c,d,e,f);
+	    processes.push_back(Process(a,b,c,d,e,f));
 	    i++;
 	}
 
-	cout << "\nlength without negatives: " << i << "\n";
+	for(int j = 0; j < i; j++) {
+		processes.at(j).print();
+	}
 
-	for (i = 1501; i < 1528; i++)
-	    	processes[size-i].print();
+	cout << "\nlength without negatives: " << i << "\n";
 
 	return 0;
 }
