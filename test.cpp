@@ -3,6 +3,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
+
+#include "process.h"
 
 using namespace std;
 
@@ -11,15 +14,17 @@ using namespace std;
 int main() {
 
 	ifstream infile("500k_processes");
-	int processes[500000][6];
+	//int processes[500000][6];
 	string line;
 	cout << "starting to read\n";
 	int i = 0;
+	int size = 500000;
+	vector<Process> processes[size];
+
 	std::getline(infile, line);
 	cout << "Pid	Bst	Arr	Pri	Dline	I/O\n";
 	cout << "+_________________________________________+\n";
-	while (std::getline(infile, line))
-	{
+	while (std::getline(infile, line)) {
 		
 	    std::istringstream iss(line);
 	    int a, b, c, d, e, f;
@@ -30,19 +35,14 @@ int main() {
 
 	    if(a < 0 || b < 0 || c < 0 || d < 0 || e < 0 || f < 0)
 	    	continue;
-	    cout << i << "\n";
-	    processes[i][0] = a;
-	    processes[i][1] = b;
-	    processes[i][2] = c;
-	    processes[i][3] = d;
-	    processes[i][4] = e;
-	    processes[i][5] = f;
-	    if(i < 25)
-	    	cout << a << "	" << b << "	" << c << "	" << d << "	" << e << "	" << f << "\n";
+	    processes[i].setAll(a,b,c,d,e,f);
 	    i++;
 	}
 
-	cout << "\nlength of file: " << sizeof processes << "\nlength without negatives: " << i << "\n";
+	cout << "\nlength without negatives: " << i << "\n";
+
+	for (i = 1501; i < 1528; i++)
+	    	processes[size-i].print();
 
 	return 0;
 }
