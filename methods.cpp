@@ -45,3 +45,14 @@ vector<Process> readFileOfProcesses(string fileName) {
 
 	return processes;
 }
+
+void printAll(vector<Process> list, int clock) {
+	cout << "Clock: " << clock << "\n";
+	cout << "Pid	Bst	Arr	Pri	Dline	I/O\n";
+	cout << "+_________________________________________+\n";
+
+	for(unsigned int i = 0; i < list.size(); i++) {
+		list.at(i).print();
+	}
+	cout << "\n";
+}

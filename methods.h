@@ -6,4 +6,6 @@
 
 std::vector<Process> readFileOfProcesses(std::string);
 
+void printAll(std::vector<Process>, int);
+
 #endif

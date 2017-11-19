@@ -20,42 +20,68 @@ using namespace std;
 
 int main() {
 
-	vector<Process> processes, queue;
+	vector<Process> processes, queue, throwOuts;
 	string fileName = "5_processes";
 
 	processes = readFileOfProcesses(fileName);
 
-	cout << "Pid	Bst	Arr	Pri	Dline	I/O\n";
-	cout << "+_________________________________________+\n";
-
-	for(unsigned int i=0; i < processes.size(); i++) {
-		processes.at(i).print();
-	}
-
 	cout << "\n";
-int j = 0;
+
 	//clock cycle
 	int clock = 0;
 	while(1) {
 
 
-		//get arrivals
+		//get arrivals and set priority
 		while(processes.size() > 0 && processes.at(0).getArrival() == clock) {
-			queue.push_back(processes.at(0));
+			//set priority
+			processes.at(0).setPriority(processes.at(0).getDeadline() - processes.at(0).getArrival());
+
+			//check where to put in array
+			int j = 0;
+			while((queue.size() > 0) && (processes.at(0).getPriority() >= queue.at(j).getPriority())) {
+				j++;
+			}
+			//insert
+			queue.insert(queue.begin()+j,processes.at(0));
 			processes.erase(processes.begin());
-			queue.at(j).print();
-			j++;
+			
 		}
+		// end get and set
+
+
+		//run process
+			//check for throwOuts
+		while (queue.size() > 0 && (queue.at(0).getDeadline() - queue.at(0).getBurst()) < clock) {
+			cout << "remaining: " << (queue.at(0).getDeadline() - queue.at(0).getBurst()) << "\n";
+			throwOuts.push_back(queue.at(0));
+			queue.erase(queue.begin());
+		}
+
+		if(queue.size() > 0) {
+			int burst = queue.at(0).getBurst();
+			burst--;
+			if(burst == 0) {
+				queue.erase(queue.begin());
+			}
+			else {
+				queue.at(0).setBurst(burst);
+			}	
+		}
+		else {
+			break;
+		}
+		//end run
+
+
+		//print
+		printAll(queue, clock);
 
 
 		//clock tick
 		clock++;
-
-		if(processes.size() == 0) {
-			break;
-		}
 	}
 
-
+	printAll(throwOuts, -1);
 	return 0;
 }
