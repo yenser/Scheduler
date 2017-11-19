@@ -52,7 +52,9 @@ void printAll(vector<Process> list, int clock) {
 	cout << "+_________________________________________+\n";
 
 	for(unsigned int i = 0; i < list.size(); i++) {
-		list.at(i).print();
+		if(i < 5) {
+			list.at(i).print();	
+		}
 	}
 	cout << "\n";
 }
