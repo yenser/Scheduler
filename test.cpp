@@ -25,7 +25,7 @@ int main() {
 	processes = readFileOfProcesses(fileName);
 
 
-	for(int j = 0; j < 500; j++) {
+	for(unsigned int j = processes.size(); j > 0; j++) {
 		processes.at(j).print();
 	}
 
