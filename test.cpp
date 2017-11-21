@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <queue>
+#include <iterator>
 #include <algorithm>
 
 #include "process.h"
@@ -12,22 +14,37 @@
 using namespace std;
 
 
-// bool sortProcess(const Process & p1, const Process & p2) {
-//    if (*p1.getArrival() != *p2.getArrival()) return *p1.getArrival() < *p2.getArrival();
-//    return *p1.getArrival() < *p2.getArrival();
+// namespace std
+// {
+//     template<> struct less<Process>
+//     {
+//        bool operator() (const Process& lhs, const Process& rhs) const
+//        {
+//            return lhs.getArrival() < rhs.getArrival();
+//        }
+//     };
+// }
+// bool operator<(const Process& a, const Process& b) {
+//   return a.getArrival() > b.getArrival();
 // }
 
 int main() {
 
-	vector<Process> processes;
+	// vector<Process> processes;
+	priority_queue<Process> processes;
 	string fileName = "500k_processes";
+	Process p;
 
-	processes = readFileOfProcesses(fileName);
+	//processes = readFileOfProcesses(fileName);
+	processes = readFileArrival(fileName);
 
-
-	for(unsigned int j = processes.size(); j > 0; j++) {
-		processes.at(j).print();
-	}
+	cout << "size: " << processes.size() << endl;
+	p = processes.top();
+	p.print();
+	// while(!processes.empty()){
+	// 	cout << processes.top() << endl;
+	// 	processes.pop();
+	// }
 
 	return 0;
 }

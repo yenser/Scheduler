@@ -3,16 +3,17 @@
 #define PROCESS_H
 
 class Process {
-	int ProcessId, Burst, Arrival, Priority, Deadline, IO;
+	
 	public:
+		int ProcessId, Burst, Arrival, Priority, Deadline, IO;
 		Process(int, int, int, int, int, int);
 		Process();
-		int getProcessId();
-		int getBurst();
-		int getArrival();
-		int getPriority();
-		int getDeadline();
-		int getIO();
+		int getProcessId() const;
+		int getBurst() const;
+		int getArrival() const;
+		int getPriority() const;
+		int getDeadline() const;
+		int getIO() const;
 
 		void setAll(int, int, int, int, int, int);
 		void setProcessId(int);

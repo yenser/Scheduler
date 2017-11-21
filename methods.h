@@ -4,12 +4,21 @@
 #ifndef METHODS_H
 #define METHODS_H
 
-std::vector<Process> readFileOfProcesses(std::string);
+class priority {
+	public:
+	bool operator()(const Process&, const Process&);
+};
 
-void printAll(std::vector<Process>, int);
+bool operator<(const Process&, const Process&);
 
-void printMFQS(std::vector<Process>, std::string, int);
+std::priority_queue<Process> readFileArrival(std::string);
 
-void RTS(std::vector<Process>);
+void printAll(std::priority_queue<Process>, int);
+
+void printMFQS(std::priority_queue<Process, std::vector<Process>, priority>, std::string, int);
+
+void RTS(std::priority_queue<Process>);
+
+void MFQS(std::priority_queue<Process>, int, int);
 
 #endif

@@ -23,22 +23,22 @@ Process::Process() {
 }
 
 
-int Process::getProcessId() {
+int Process::getProcessId() const {
 	return ProcessId;
 }
-int Process::getBurst() {
+int Process::getBurst() const {
 	return Burst;
 }
-int Process::getArrival() {
+int Process::getArrival() const {
 	return Arrival;
 }
-int Process::getPriority() {
+int Process::getPriority() const {
 	return Priority;
 }
-int Process::getDeadline() {
+int Process::getDeadline() const {
 	return Deadline;
 }
-int Process::getIO() {
+int Process::getIO() const {
 	return IO;
 }
 
