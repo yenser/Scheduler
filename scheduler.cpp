@@ -20,8 +20,8 @@ int main() {
 	string fileName = "500k_processes";
 	processes = readFileArrival(fileName);
 
-	RTS(processes);
-	//MFQS(processes, 32, 5);
+	//RTS(processes);
+	MFQS(processes, 32, 5);
 	//WHS(processes);
 
 	

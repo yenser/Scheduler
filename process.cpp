@@ -11,6 +11,19 @@ Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadli
 	this->Priority = Priority;
 	this->Deadline = Deadline;
 	this->IO = IO;
+	this->Aging = 0;
+	this->OriginalPriority = Priority;
+}
+
+Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadline, int IO, int Aging) {
+	this->ProcessId = ProcessId;
+	this->Burst = Burst;
+	this->Arrival = Arrival;
+	this->Priority = Priority;
+	this->Deadline = Deadline;
+	this->IO = IO;
+	this->Aging = Aging;
+	this->OriginalPriority = Priority;
 }
 
 Process::Process() {
@@ -20,6 +33,8 @@ Process::Process() {
 	this->Priority = -1;
 	this->Deadline = -1;
 	this->IO = -1;
+	this->Aging = 0;
+	this->OriginalPriority = Priority;
 }
 
 
@@ -40,6 +55,12 @@ int Process::getDeadline() const {
 }
 int Process::getIO() const {
 	return IO;
+}
+int Process::getAging() const{
+	return Aging;
+}
+int Process::getOriginalPriority() const {
+	return OriginalPriority;
 }
 
 
@@ -74,6 +95,10 @@ void Process::setDeadline(int newDeadline) {
 
 void Process::setIO(int newIO) {
 	IO = newIO;
+}
+
+void Process::setAging(int newAging) {
+	Aging = newAging;
 }
 
 void Process::print() {

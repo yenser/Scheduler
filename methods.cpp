@@ -159,7 +159,7 @@ void RTS(priority_queue<Process> processes) {
 }
 
 void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
-	int TQ1, TQ2, TQ3, TQ4, currentTQ, index;
+	int TQ1, TQ2, TQ3, TQ4, currentTQ, index, ageTime;
 
 	if(queueSize >= 5) {
 		TQ4 = timeQuantum;
@@ -178,7 +178,7 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 	}
 
 
-	priority_queue<Process, vector<Process>, priority> queue1, queue2, queue3, queue4, fcfs, *currentQueue;
+	priority_queue<Process, vector<Process>, priority> queue1, queue2, queue3, queue4, fcfs, tempQueue, *currentQueue;
 
 	currentTQ = 0;
 
@@ -274,7 +274,6 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 			// if(index == 0) {
 
 			// 	fcfsSize = currentQueue->size();
-			// 	cout << "IM HERE!!!!" << endl;
 			// 	for(int i = 0; i < fcfsSize; i++) {
 			// 		if(fcfsSize-i <= 10) {
 			// 			p = currentQueue->top();
@@ -345,7 +344,16 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 
 void WHS (priority_queue<Process> processes) {
 
-	queue<Process> queueHigh, queueLow, *currentQueue;
+	int TQ = 10;
+	int size = processes.size();
+	queue<Process> waitQueue0, waitQueue1;
+	priority_queue<Process, vector<Process>, priority> queueHigh, queueLow, *currentQueue, tempQueue;
+
+	for (int i = 0; i < size; i++) {
+		tempQueue.push(Process(processes.top().getProcessId(), processes.top().getBurst(), processes.top().getArrival(), processes.top().getPriority(), processes.top().getDeadline(), processes.top().getIO(), TQ));
+		processes.pop();
+	}
+
 
 	clock_t t1,t2;
     t1=clock();
@@ -388,12 +396,17 @@ void WHS (priority_queue<Process> processes) {
 			continue;
 		}
 
-		int burst = currentQueue->front().getBurst();
+		int burst = currentQueue->top().getBurst();
 		burst--;
 		if(burst == 0) {
 			currentQueue->pop();
 		} else {
-			currentQueue->front().setBurst(burst);
+
+			//check for I/O
+			if(TQ == 1) {
+				//do I/O
+
+			}
 
 			//aging
 			// if(index == 0) {
