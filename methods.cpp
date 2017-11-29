@@ -69,11 +69,8 @@ void printAll(priority_queue<Process, vector<Process>, dline> list, int clock, p
 
 }
 
-void printMFQS(priority_queue<Process, vector<Process>, priority> list, string name, int clock) {
-	cout << "Queue: " << name << endl;
-	cout << "Number of Processes: " << list.size() << endl;
-	cout << endl;
-
+void printMFQS(int list4, int list3, int list2, int list1, int list0, int clock) {
+	cout << "Clock: " << clock  << " " << "NP: " << list4+list3+list2+list1+list0 << " " << "Queue4: " << list4 << "         " << "Queue3: " << list3 << "         " << "Queue2: " << list2 << "         " << "Queue1: " << list1 << "         " << "FCFS: " << list0 <<  "         " << '\r' << flush;
 }
 
 void printWHS(queue<Process> list, string name) {
@@ -158,8 +155,15 @@ void RTS(priority_queue<Process> processes) {
     cout << "_________________________________________\n";
 }
 
-void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
-	int TQ1, TQ2, TQ3, TQ4, currentTQ, index, ageTime;
+void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize, int age) {
+	int TQ1, TQ2, TQ3, TQ4, currentTQ, index, np, awt, att, fcfsSize;
+
+
+	index = 0;
+	TQ3 = 0;
+	np = processes.size();
+	awt = 0;
+	att = 0;
 
 	if(queueSize >= 5) {
 		TQ4 = timeQuantum;
@@ -178,13 +182,16 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 	}
 
 
-	priority_queue<Process, vector<Process>, priority> queue1, queue2, queue3, queue4, fcfs, tempQueue, *currentQueue;
+	priority_queue<Process, vector<Process>, priority> queue1, queue2, queue3, queue4, *currentQueue;
+	queue<Process> fcfs;
 
 	currentTQ = 0;
 
 	Process p;
 	clock_t t1,t2;
     t1=clock();
+
+    p = processes.top();
 
     cout << "\n\n\n\tRunning MFQS" << endl;
     cout << "_________________________________________\n";
@@ -242,8 +249,7 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 				index = 1;
 			} else {
 				//FCFS
-				currentTQ = fcfs.top().getBurst();
-				currentQueue = &fcfs;
+				currentTQ = fcfs.front().getBurst();
 				index = 0;
 			}
 		} 
@@ -251,108 +257,129 @@ void MFQS (priority_queue<Process> processes, int timeQuantum, int queueSize) {
 
 
 
-
 		//run process
-		if(currentQueue->size() == 0) { 
+		if(currentQueue->size() == 0 && fcfs.size() == 0) { 
 			tick++;
 			continue;
 		}
 
-		int burst = currentQueue->top().getBurst();
-		burst--;
-		currentTQ--;
-		if(burst == 0) {
-			currentQueue->pop();
-			currentTQ = 0;
+		//add to wait
+		awt += (queue4.size() + queue3.size() + queue2.size() + queue1.size() + fcfs.size() - 1);
+
+		if(index != 0) {
+
+			int burst = currentQueue->top().getBurst();
+			burst--;
+			currentTQ--;
+			if(burst == 0) {
+				currentQueue->pop();
+				currentTQ = 0;
+			} else {
+				p = currentQueue->top();
+				p.setBurst(burst);
+				currentQueue->pop();
+				currentQueue->push(p);	
+
+
+				//check if TQ finishes
+				if(currentTQ == 0) {
+					if(index == 4) {
+						queue3.push(currentQueue->top());
+						currentQueue->pop();
+					} else if(index == 3) {
+						queue2.push(currentQueue->top());
+						currentQueue->pop();
+					} else if(index == 2) {
+						queue1.push(currentQueue->top());
+						currentQueue->pop();
+					} else if(index == 1) {
+						p = currentQueue->top();
+						currentQueue->pop();
+						p.setAging(age);
+						fcfs.push(p);
+					}
+				}
+			}
 		} else {
-			p = currentQueue->top();
-			Process pp = Process(p.getProcessId(), burst, p.getArrival(), p.getPriority(), p.getDeadline(), p.getIO());
-			currentQueue->pop();
-			currentQueue->push(pp);	
 
-			//aging
-			// if(index == 0) {
 
-			// 	fcfsSize = currentQueue->size();
-			// 	for(int i = 0; i < fcfsSize; i++) {
-			// 		if(fcfsSize-i <= 10) {
-			// 			p = currentQueue->top();
-			// 			Process pp = Process(p.getProcessId(), p.getBurst(), p.getArrival(), p.getPriority()-1, p.getDeadline(), p.getIO());
-			// 			currentQueue->pop();
-			// 			tempQueue.push(pp);	
+			int burst = fcfs.front().getBurst();
+			burst--;
+			currentTQ--;
+			if(burst == 0) {
+				fcfs.pop();
+				currentTQ = 0;
+			} else {
+				fcfs.front().setBurst(burst);
+			}
+		}
+		//end run
 
-			// 		}else {
-			// 			tempQueue.push(currentQueue->top());
-			// 			currentQueue->pop();
-			// 		}
-			// 	}
 
-			// 	for(int i = 0; i < fcfsSize; i++) {
-			// 		currentQueue->push(tempQueue.top());
-			// 		tempQueue.pop();
-			// 	}
+		//aging
+		if(fcfs.size() > 0 && queueSize > 1) {
+			if(index == 0) {
+				p = fcfs.front();
+				fcfs.pop();
+				fcfsSize = fcfs.size();
+				fcfs.push(p);
+			}
+			else {
+				fcfsSize = fcfs.size();
+			}
 
-			// }
-			//end aging
+			Process pp;
+			
+			
+			for(int i = 0; i < fcfsSize; i++) {
+				pp = fcfs.front();
+				fcfs.pop();
+				pp.decreaseAging(1);
 
-			//check if TQ finishes
-			if(currentTQ == 0) {
-				if(index == 4) {
-					queue3.push(currentQueue->top());
-					currentQueue->pop();
-				} else if(index == 3) {
-					queue2.push(currentQueue->top());
-					currentQueue->pop();
-				} else if(index == 2) {
-					queue1.push(currentQueue->top());
-					currentQueue->pop();
-				} else if(index == 1) {
-					fcfs.push(currentQueue->top());
-					currentQueue->pop();
+				if(pp.getAging() == 0) {
+					queue1.push(pp);
+				} else {
+					fcfs.push(pp);
 				}
 			}
 		}
 		
-		//end run
+
+
 
 		if(processes.size() == 0 && fcfs.size() == 0 && queue1.size() == 0 && queue2.size() == 0 && queue3.size() == 0 && queue4.size() == 0)
 			break;
 
 
 		// //print
-		// if(tick%100000 == 0) {
-		// 	cout << "clock: " << tick << endl;
-		// 	printMFQS(queue4, "queue4", tick);
-		// 	printMFQS(queue3, "queue3", tick);
-		// 	printMFQS(queue2, "queue2", tick);
-		// 	printMFQS(queue1, "queue1", tick);	
-		// 	printMFQS(fcfs, "fcfs", tick);	
-		// 	cout << "____________________________________________________" << endl;
-		// }
+		// if(tick%10 == 0)
+		// 	printMFQS(queue4.size(), queue3.size(), queue2.size(), queue1.size(), fcfs.size(), tick);
+		
 
 		//clock tick
 		tick++;
 	}
 
-
+	awt = awt/np;
 	t2=clock();
     float diff ((float)t2-(float)t1);
     float seconds = diff / CLOCKS_PER_SEC;
-    cout << "\tSeconds: " << seconds << endl;
+    cout << endl << "\tSeconds: " << seconds << endl;
+    cout << "\tAverage Wait Time: " << awt << endl;
     cout << "_________________________________________\n";
 }
 
 void WHS (priority_queue<Process> processes) {
 
 	int TQ = 10;
-	int size = processes.size();
-	queue<Process> waitQueue0, waitQueue1;
-	priority_queue<Process, vector<Process>, priority> queueHigh, queueLow, *currentQueue, tempQueue;
+	int age = 10;
 
-	for (int i = 0; i < size; i++) {
-		tempQueue.push(Process(processes.top().getProcessId(), processes.top().getBurst(), processes.top().getArrival(), processes.top().getPriority(), processes.top().getDeadline(), processes.top().getIO(), TQ));
-		processes.pop();
-	}
+	vector<queue<Process> > QueueArray;
+	QueueArray.resize(100);
+
+
+	// cout << "size: " << QueueArray.size() << endl;
+	Process p;
 
 
 	clock_t t1,t2;
@@ -368,84 +395,60 @@ void WHS (priority_queue<Process> processes) {
 
 		//get arrivals and put in first queue
 		while(processes.size() > 0 && processes.top().getArrival() == tick) {
-			if(processes.top().getPriority() >= 50) {
-				queueHigh.push(processes.top());
-			}
-			else {
-				queueLow.push(processes.top());
-			}
+			
+			p = processes.top();
 			processes.pop();
+			p.setAging(age);
+			QueueArray.at(p.getPriority()).push(p);
 		}
 		// end get and set
+
+		cout << "\n\nclock: " << tick << endl;
+		QueueArray.at(p.getPriority()).front().print();
 
 
 
 		//Check which queue to run
-		if(queueHigh.size() > 0)
-			currentQueue = &queueHigh;
-		else
-			currentQueue = &queueLow;
+		int i = 100;
+		while(QueueArray.at(i).size() != 0 || i < 0) {
+			i--;
+		}
+		if(i < 0)
+			continue;
 		//end check
 
 
 
+		// //run process
+		// if(currentQueue->size() == 0) { 
+		// 	tick++;
+		// 	continue;
+		// }
 
-		//run process
-		if(currentQueue->size() == 0) { 
-			tick++;
-			continue;
-		}
+		// int burst = currentQueue->top().getBurst();
+		// burst--;
+		// if(burst == 0) {
+		// 	currentQueue->pop();
+		// } else {
 
-		int burst = currentQueue->top().getBurst();
-		burst--;
-		if(burst == 0) {
-			currentQueue->pop();
-		} else {
+		// 	//check for I/O
+		// 	if(TQ == 1) {
+		// 		//do I/O
 
-			//check for I/O
-			if(TQ == 1) {
-				//do I/O
+		// 	}
+		// }
+		// //end run
 
-			}
+		// if(processes.size() == 0 && queueHigh.size() == 0 && queueLow.size() == 0)
+		// 	break;
 
-			//aging
-			// if(index == 0) {
-
-			// 	fcfsSize = currentQueue->size();
-			// 	for(int i = 0; i < fcfsSize; i++) {
-			// 		if(fcfsSize-i <= 10) {
-			// 			p = currentQueue->top();
-			// 			Process pp = Process(p.getProcessId(), p.getBurst(), p.getArrival(), p.getPriority()-1, p.getDeadline(), p.getIO());
-			// 			currentQueue->pop();
-			// 			tempQueue.push(pp);	
-
-			// 		}else {
-			// 			tempQueue.push(currentQueue->top());
-			// 			currentQueue->pop();
-			// 		}
-			// 	}
-
-			// 	for(int i = 0; i < fcfsSize; i++) {
-			// 		currentQueue->push(tempQueue.top());
-			// 		tempQueue.pop();
-			// 	}
-
-			// }
-			//end aging
-		}
-		//end run
-
-		if(processes.size() == 0 && queueHigh.size() == 0 && queueLow.size() == 0)
-			break;
-
-
-		//print
-		if(tick%100 == 0) {
-			cout << "clock: " << tick << "         " << "queue 50-99: " << queueHigh.size() << "         " << "queue 0-49: " << queueLow.size() << "         " << '\r' << flush;
-			// printWHS(queueHigh, "51-100");
-			// printWHS(queueLow, "1-50");
-			// cout << "____________________________________________________" << endl;
-		}
+		// //print
+		// if(tick%100 == 0) {
+		// 	cout << "clock: " << tick << "         " << "queue 50-99: " << queueHigh.size() << "         " << "queue 0-49: " << queueLow.size() << "         " << '\r' << flush;
+		// 	// printWHS(queueHigh, "51-100");
+		// 	// printWHS(queueLow, "1-50");
+		// 	// cout << "____________________________________________________" << endl;
+		// }
 
 		//clock tick
 		tick++;

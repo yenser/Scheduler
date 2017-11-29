@@ -101,6 +101,10 @@ void Process::setAging(int newAging) {
 	Aging = newAging;
 }
 
+void Process::decreaseAging(int amount) {
+	Aging = Aging - amount;
+}
+
 void Process::print() {
 	std::cout << ProcessId << "	" << Burst << "	" << Arrival
 	 << "	" << Priority << "	" << Deadline << "	" << IO << "\n";

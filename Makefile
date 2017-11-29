@@ -1,6 +1,6 @@
-CFLAGS = -Wall
+CFLAGS = -Wall -O3
 main: clean scheduler.o methods.o process.o
-	g++ scheduler.o methods.o process.o -o scheduler
+	g++ scheduler.o methods.o process.o -o scheduler -O3
 
 test: clean test.o methods.o process.o
 	g++ test.o methods.o process.o -o test

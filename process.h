@@ -26,6 +26,7 @@ class Process {
 		void setDeadline(int);
 		void setIO(int);
 		void setAging(int);
+		void decreaseAging(int);
 
 		void print();
 

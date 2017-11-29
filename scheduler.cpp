@@ -21,8 +21,8 @@ int main() {
 	processes = readFileArrival(fileName);
 
 	//RTS(processes);
-	MFQS(processes, 32, 5);
-	//WHS(processes);
+	//MFQS(processes, 64, 5, 100);
+	WHS(processes);
 
 	
 
