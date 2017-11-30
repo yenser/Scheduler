@@ -4,14 +4,20 @@ Authors: Jens Streck, Joe Woznicki
 
 COMPILE:
 	> make
+
+RUN:
 	> ./scheduler
 
 FILES:
 	Makefile
+	README
 	methods.cpp
 	methods.h
 	schuduler.cpp
+	process.cpp
+	process.h
 	500k_processes
+	5_processes
 	
 TEST FILES:
 	test.cpp
