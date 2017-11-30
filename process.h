@@ -5,7 +5,7 @@
 class Process {
 	
 	public:
-		int ProcessId, Burst, Arrival, Priority, Deadline, IO, Aging, OriginalPriority;
+		int ProcessId, Burst, Arrival, Priority, Deadline, IO, Aging, OriginalPriority, OriginalBurst, OriginalIO, TT, WT;
 		Process(int, int, int, int, int, int);
 		Process(int, int, int, int, int, int, int);
 		Process();
@@ -17,6 +17,10 @@ class Process {
 		int getIO() const;
 		int getAging() const;
 		int getOriginalPriority() const;
+		int getOriginalBurst() const;
+		int getTurnaroundTime() const;
+		int getWaitTime() const;
+		int getOriginalIO() const;
 
 		void setAll(int, int, int, int, int, int);
 		void setProcessId(int);
@@ -27,6 +31,9 @@ class Process {
 		void setIO(int);
 		void setAging(int);
 		void decreaseAging(int);
+		void adjustPriorityBy(int);
+		void setTurnaroundTime(int);
+		void setWaitTime(int);
 
 		void print();
 

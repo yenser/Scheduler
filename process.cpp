@@ -2,7 +2,7 @@
 #include <iostream>
 #include "process.h"
 
-int ProcessId, Burst, Arrival, Priority, Deadline, IO;
+int ProcessId, Burst, Arrival, Priority, Deadline, IO, Aging, OriginalPriority, OriginalBurst, OriginalIO, TT, WT;
 
 Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadline, int IO) {
 	this->ProcessId = ProcessId;
@@ -13,6 +13,10 @@ Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadli
 	this->IO = IO;
 	this->Aging = 0;
 	this->OriginalPriority = Priority;
+	this->OriginalBurst = Burst;
+	this->OriginalIO = IO;
+	this->TT = 0;
+	this->WT = 0;
 }
 
 Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadline, int IO, int Aging) {
@@ -24,6 +28,10 @@ Process::Process(int ProcessId, int Burst, int Arrival, int Priority, int Deadli
 	this->IO = IO;
 	this->Aging = Aging;
 	this->OriginalPriority = Priority;
+	this->OriginalBurst = Burst;
+	this->OriginalIO = IO;
+	this->TT = 0;
+	this->WT = 0;
 }
 
 Process::Process() {
@@ -61,6 +69,22 @@ int Process::getAging() const{
 }
 int Process::getOriginalPriority() const {
 	return OriginalPriority;
+}
+
+int Process::getOriginalBurst() const {
+	return OriginalBurst;
+}
+
+int Process::getTurnaroundTime() const {
+	return TT;
+}
+
+int Process::getWaitTime() const {
+	return WT;
+}
+
+int Process::getOriginalIO() const {
+	return OriginalIO;
 }
 
 
@@ -105,7 +129,19 @@ void Process::decreaseAging(int amount) {
 	Aging = Aging - amount;
 }
 
+void Process::adjustPriorityBy(int size) {
+	Priority += size;
+}
+
 void Process::print() {
 	std::cout << ProcessId << "	" << Burst << "	" << Arrival
 	 << "	" << Priority << "	" << Deadline << "	" << IO << "\n";
+}
+
+void Process::setWaitTime(int time) {
+	WT = time;
+}
+
+void Process::setTurnaroundTime(int time) {
+	TT = time;
 }

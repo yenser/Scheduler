@@ -2,8 +2,11 @@ CFLAGS = -Wall -O3
 main: clean scheduler.o methods.o process.o
 	g++ scheduler.o methods.o process.o -o scheduler -O3
 
+debug: clean scheduler.o methods.o process.o
+	g++ scheduler.o methods.o process.o -o scheduler -O3 -DDEBUG
+
 test: clean test.o methods.o process.o
-	g++ test.o methods.o process.o -o test
+	g++ test.o methods.o process.o -o test 
 
 scheduler.o: scheduler.cpp
 	g++ -c scheduler.cpp $(CFLAGS)
